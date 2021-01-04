@@ -1,0 +1,47 @@
+{block content}
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Moje top produkty</h1>
+    <p>
+        Moje top produkty jsou vyfiltrované produkty mé skupiny pouze na produkty spadající do mých kategorií.<br>
+        Pokud z produktů mé skupiny nevyhovuje žádný produkt, jsou uživatelovi doporučeny všechny produkty z jeho kategorií.<br>
+    </p>
+    <div class="container">
+        <div class="row">
+            <table id="groupProducts">
+                <tr>
+                    <th>Název</th>
+                    <th>Počet hodnocení</th>
+                    <th>Hodnocení</th>
+                    <th>Typ</th>
+                </tr>
+                {foreach $myTopProducts as $key => $tp}
+                    <tr>
+                        <td>
+                            <a class="text-info" n:href="Product:show $key">{$key}</a>
+                        </td>
+                        {foreach $tp as $name => $value}
+                            {if $name == type}
+                                {foreach $categories as $cat}
+                                    {if $value == $cat->name}
+                                        <td>
+                                            {$cat->full_name}
+                                        </td>
+                                    {/if}
+                                {/foreach}
+                            {elseif $name == count}
+                                <td>
+                                    {$value}
+                                </td>
+                            {else}
+                                <td>
+                                    {$value}
+                                </td>
+                            {/if}
+                        {/foreach}
+
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+
+{/block}

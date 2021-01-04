@@ -1,0 +1,62 @@
+{block content}
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Naposledy prohlížené produkty</h1>
+    <p>
+        Při přihlášení se vytvoří session a jsou do ní ukládány prohlížené produkty. Session zaniká při odhlášení a ukloží produkty do databáze.<br>
+        Uživatel tak může vidět jaké produkty si prohlížel jiné dny.<br>
+    </p>
+    <div class="container mb-5">
+        <div class="row">
+
+            <table id="groupProducts">
+                <tr>
+                    <th></th>
+                    <th>Název</th>
+                    <th>Navštíveno</th>
+                    <th>Naposledy navštíveno</th>
+                    <th>Moje hodnocení</th>
+                    <th>Typ</th>
+                </tr>
+                {foreach $recentlyProducts as $key => $recentlyProduct}
+                {*{foreach $products as $product}*}
+                    <tr>
+                        <td></td>
+                        <td><a class="text-info" n:href="Product:show $key">{$key}</a></td>
+                        {foreach $recentlyProduct as $k => $value}
+                                {if $k == count}
+                                    <td>{$value}x</td>
+                                {elseif $k == time}
+                                    <td>{$value}</td>
+                                {elseif $k == rating}
+                                    <td>{$value}</td>
+                                {elseif $k == type}
+                                    <td>{$value}</td>
+                                {/if}
+                        {/foreach}
+                    {/foreach}
+                    </tr>
+                {*{/foreach}*}
+            </table>
+            <br>
+        </div>
+    </div>
+
+    {foreach $time as $tim}
+        <table id="groupProducts">
+        <tr>
+            <th>{$tim->view_time|date: "j. n. Y"}</th>
+            <th>Navštíveno</th>
+            <th>Hodnocení</th>
+        </tr>
+        {foreach $history as $his}
+            {if $his->view_time==$tim->view_time}
+                <tr>
+                    <td>{$his->product_id}</td>
+                    <td>{$his->count}</td>
+                    <td>{$his->rating}</td>
+                </tr>
+            {/if}
+        {/foreach}
+    {/foreach}
+    </table>
+
+{/block}

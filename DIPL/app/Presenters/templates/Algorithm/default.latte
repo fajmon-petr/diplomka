@@ -1,0 +1,45 @@
+{block content}
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Moje skupina</h1>
+    <div class="container">
+        <div class="row">
+
+            <p>
+                Moje skupina je vypočítána jako podobnost mých oblíbených kategorií s kategoriemi ostatních uživatelů.<br>
+                Pro každého uživatele je zjištěn počet kategorií a počet stejných kategorií s aktivním uživatelem. Pokud je více jak 50% kategorií podobných, je tento uživatel přidán do mojí skupiny.<br>
+            </p>
+
+            <table id="groupProducts">
+                <tr>
+                    <th>Uživatel</th>
+                    <th>Kategorie</th>
+                </tr>
+                {foreach $users as $us}
+                {foreach $similarity as $sim => $s}
+                    {if $us->user_id == $sim}
+                    <tr>
+                        <td>
+                            {$us->username}
+                        </td>
+                        <td>
+                        {foreach $s as $as}
+                        {foreach $categories as $c}
+                            {if $as == $c->name}
+
+                                {$c->full_name . ", "}
+
+                            {/if}
+                        {/foreach}
+                    {/foreach}
+                        </td>
+
+                    </tr>
+                         {/if}
+            {/foreach}
+                {/foreach}
+            </table>
+
+
+        </div>
+    </div>
+
+{/block}

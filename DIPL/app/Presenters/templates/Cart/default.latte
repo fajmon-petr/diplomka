@@ -1,0 +1,39 @@
+{block content}
+
+
+    <h1>Nákupní košík</h1>
+    <div class="row">
+        {*{foreach $cart as $key => $item}*}
+        {*{foreach $products as $product}*}
+        {*{if $key == $product->product_id}*}
+        {**}
+        {*{/if}*}
+        {*{/foreach}*}
+        {*{/foreach}*}
+
+        <table id="groupProducts">
+            <tr>
+                <th>Název</th>
+                <th>Počet v košíku</th>
+                <th>Odebrat</th>
+            </tr>
+            {foreach $cart as $key => $item}
+                <tr>
+                    {foreach $products as $product}
+                        {if $key == $product->product_id}
+                            <td>{$product->title}</td>
+                            <td>{$item['count']}x</td>
+                            <td><a n:href="DeleteFromCart! $product->product_id"><i class="fa fa-trash fa-sm fa-fw mr-2 ml-auto"></i></a></td>
+                        {/if}
+                    {/foreach}
+                </tr>
+            {/foreach}
+        </table>
+        <div style="width: 100%">
+            <a n:href="Buy!"><input type="button" class="btn btn-primary" value="Zakoupit" style="float: right"></a>
+        </div>
+
+    </div>
+
+
+{/block}

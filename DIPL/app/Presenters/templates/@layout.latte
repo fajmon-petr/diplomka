@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>{ifset title}{include title|stripHtml} | {/ifset}Nette Web</title>
+	<link rel="stylesheet" href="{$basePath}/css/style.css">
+
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+
+</head>
+
+<body>
+<div class="container">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" n:href="Homepage:">DIPP e-shop</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		{if $user->loggedIn}
+			<div class="row">
+				<a class="nav-link" n:href="Algorithm:">
+					<button class="btn btn-primary">Moje skupina</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:allProductsGroup">
+					<button class="btn btn-primary">Produkty mé skupiny</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:myTopProducts">
+					<button class="btn btn-primary">Moje top produkty</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:recentlyViewedProducts">
+					<button class="btn btn-primary">Prohlížené produkty</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:tfidf">
+					<button class="btn btn-primary">TF-IDF</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:percent">
+					<button class="btn btn-primary">Přístup 1</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:rating">
+					<button class="btn btn-primary">Přístup 2</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:similarHistory">
+					<button class="btn btn-primary">Přístup 3</button>
+				</a>
+				{*<a class="nav-link" n:href="Algorithm:svd">*}
+					{*<button class="btn btn-primary">Přístup 4</button>*}
+				{*</a>*}
+			</div>
+
+		{/if}
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav ml-auto">
+				{if $user->loggedIn}
+					<li>
+						<div class="nav-item dropdown no-arrow">
+							<a class="nav-link dropdown" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								{*{if $cart == null}*}
+									<i class="fa fa-shopping-cart fa-2x fa-fw mr-2 ml-auto text-primary"></i>
+								{*{else}*}
+									{*<i class="fa fa-shopping-cart fa-sm fa-fw mr-2 ml-auto text-black-400"></i>*}
+								{*{/if}*}
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" n:href="Cart:">Košík</a>
+								<a class="dropdown-item" n:href="History:">Historie</a>
+							</div>
+						</div>
+					</li>
+				{/if}
+				<li>
+					<div class="nav-item dropdown no-arrow">
+						<a class="nav-link dropdown" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<i class="fa fa-user fa-2x fa-fw mr-2 ml-auto text-primary"></i>
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+							{if $user->loggedIn}
+								<a class="dropdown-item" n:href="Sign:out">Odhlášení</a>
+								<a class="dropdown-item" n:href="User:">Nastaveni</a>
+							{else}
+								<a class="dropdown-item" n:href="Sign:in">Prihlaseni</a>
+								<a class="dropdown-item" n:href="Sign:up">Registrace</a>
+							{/if}
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Something else here</a>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+
+		</div>
+	</nav>
+	<div class="row m-0">
+		<div class="col-2 bg-light">
+			<ul class="navbar-nav sidebar sidebar-dark accordion bg-light " id="accordionSidebar">
+				{foreach $categories as $category}
+					<li class="nav-item {ifCurrent Product:category $category->name}active{/ifCurrent}">
+						<a class="nav-link text-info" n:href="Product:category $category->name"><i class="fa fa-chevron-right mr-2{ifCurrent Product:category $category->name}{else} d-none{/ifCurrent}"></i>{$category->full_name}</a>
+					</li>
+				{/foreach}
+			</ul>
+		</div>
+		<div class="col-10">
+			<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+			{include content}
+
+		</div>
+
+	</div>
+
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="{$basePath}/sbadmin/vendor/jquery/jquery.min.js"></script>
+<script src="{$basePath}/sbadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{$basePath}/sbadmin/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{$basePath}/sbadmin/js/sb-admin-2.min.js"></script>
+
+{block scripts}
+	<!--	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script> -->
+	{*<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>*}
+	<!--	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script> -->
+	<!--	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> -->
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/sbadmin/js/nette.ajax.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	<script>
+        $(function () {
+            $.nette.init();
+        });
+	</script>
+{/block}
+
+
+
+
+</body>
+</html>

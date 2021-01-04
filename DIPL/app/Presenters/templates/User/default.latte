@@ -1,0 +1,35 @@
+{block content}
+    <h1 n:block="title">Nastaveni</h1>
+    {if $user->loggedIn && $user->getIdentity()->id === 4}
+    {control generateVote}
+
+    {control generateCategory}
+
+    {control generateRate}
+
+    {*<a n:href="similarity!"><button>Similarity</button></a>*}
+    {/if}
+
+
+    {form categoryForm}
+        {foreach $form[category]->items as $key => $label}
+            <label style="width: 25%;" n:name="category:$key"><input n:name="category:$key"> {$label}</label>
+        {/foreach}
+        <p><input n:name=send class="btn btn-primary">
+    {/form}
+
+    <table id="groupProducts">
+        <tr>
+            <th>Moje kategorie</th>
+        </tr>
+        {foreach $userCategories as $userC}
+            {foreach $categories as $c}
+                {if $userC->category == $c->name}
+                    <tr>
+                        <td>{$c->full_name}</td>
+                    </tr>
+                {/if}
+            {/foreach}
+        {/foreach}
+    </table>
+{/block}

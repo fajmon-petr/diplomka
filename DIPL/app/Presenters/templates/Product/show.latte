@@ -1,0 +1,172 @@
+{block scripts}
+    {include parent}
+    <script>
+        /*  $("#rating").change(function(){
+              var star1 = document.getElementById("star1");
+              var star2 = document.getElementById("star2");
+              var star3 = document.getElementById("star3");
+              var star4 = document.getElementById("star4");
+              var star5 = document.getElementById("star5");
+          if(star1.value =="" && star2.value == "" && star3.value == "" && star4.value == "" && star5.value == "" ){
+          document.getElementById("confirm").disabled = true;
+          }else {
+          document.getElementById("confirm").disabled = false;
+          }
+          });*/
+
+
+        $("#rating").click(function(){
+            document.getElementById("confirm").click();
+        });
+    </script>
+
+
+    <style>
+        .rating {
+            float:left;
+        }
+
+        /* :not(:checked) is a filter, so that browsers that don’t support :checked don’t
+           follow these rules. Every browser that supports :checked also supports :not(), so
+           it doesn’t make the test unnecessarily selective */
+        .rating:not(:checked) > input {
+            position:absolute;
+            top:-9999px;
+            clip:rect(0,0,0,0);
+        }
+
+        .rating:not(:checked) > label {
+            float:right;
+            width:1em;
+            padding:0 .1em;
+            overflow:hidden;
+            white-space:nowrap;
+            cursor:pointer;
+            font-size:200%;
+            line-height:1.2;
+            color:#ddd;
+            text-shadow:1px 1px #bbb, 2px 2px #666, .1em .1em .2em rgba(0,0,0,.5);
+        }
+
+        .rating:not(:checked) > label:before {
+            content: '★ ';
+        }
+
+        .rating > input:checked ~ label {
+            color: #f70;
+            text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
+        }
+
+        .rating:not(:checked) > label:hover,
+        .rating:not(:checked) > label:hover ~ label {
+            color: gold;
+            text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+        }
+
+        .rating > input:checked + label:hover,
+        .rating > input:checked + label:hover ~ label,
+        .rating > input:checked ~ label:hover,
+        .rating > input:checked ~ label:hover ~ label,
+        .rating > label:hover ~ input:checked ~ label {
+            color: #ea0;
+            text-shadow:1px 1px goldenrod, 2px 2px #B57340, .1em .1em .2em rgba(0,0,0,.5);
+        }
+
+        .rating > label:active {
+            position:relative;
+            top:2px;
+            left:2px;
+        }
+
+    </style>
+{/block}
+
+{block content}
+    <div class="container">
+        <div class="row">
+            <p><a n:href="Product:category $products->category">Zpet na vypis prispevku</a></p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="text-center" style="height: 225px">
+                    <img class="rounded img-fluid mh-100"  alt="Responsive image" src="{$basePath}/{$products->path}">
+                </div>
+
+                <div class="mt-2">
+                    Zdroj:
+                    <a href="{$products->url}" target="_blank">Košík.cz/{$products->title}</a>
+                </div>
+
+
+            </div>
+            <div class="col-md-4">
+                <h1 n:block="title" class="h2">{$products->title}</h1>
+                Cena:
+                <p n:block="price" class="h2">{$products->price|number:2, ',', ' '} Kč</p>
+                {if $user->loggedIn}
+                <form n:name=buy>
+                    <label>Počet:</label><br>
+                    <input n:name=count type="number" min="1" size="5">
+                    <button n:name=send type="submit" style="background: none; border: none; "><i class="fa fa-cart-plus fa-2x fa-fw mr-2 ml-auto text-success"></i></button>
+                </form>
+                {/if}
+            </div>
+            <div class="col-md-4">
+                {if $products->rating === NULL} {else} Hodnocení: <h2>{$products->rating |number:2} ({$ratingCount}) </h2>{/if}
+                {if $user->loggedIn}
+
+                    <form n:name=voteForm >
+                        <fieldset class="rating" id="rating">
+                            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5">5 stars</label>
+                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4">4 stars</label>
+                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3">3 stars</label>
+                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2">2 stars</label>
+                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="1">1 star</label>
+                        </fieldset>
+                        <br>
+                        <button style="border: none; margin: auto;"><input n:name=send class="btn btn-success ml-1 d-none" >Ohodnotit</button>
+                    </form>
+                    <br>
+                    {if $myRating} Moje hodnocení: <p class="h5">{$myRating->rating}</p>{else} {/if}
+                {/if}
+            </div>
+        </div>
+        <br>
+        <div class="product">
+            <h2 class="h3">Popis produktu</h2>
+            <p>{$products->content}</p>
+        </div>
+        <br>
+
+        {if $user->loggedIn}
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <h2 class="h3">Podobné produkty</h2>
+                </div>
+            </div>
+            <div class="row">
+                {foreach $similarProducts as $key => $recentProduct}
+                {foreach $recentlyViewed as $product}
+                        {if $key == $product->title}
+                            <div class="col-md-3 col-sm-6 p-0">
+                                <div class=" text-center m-1 img-thumbnail bg-light">
+                                    <div class="text-center" style="height: 116px">
+                                        <img class="rounded img-fluid mh-100"   alt="Responsive image" src="{$basePath}/{$product->path}">
+                                    </div>
+                                    <a class="text-info" n:href="Product:show $product->title">{$product->title}</a>
+                                </div>
+                            </div>
+                        {/if}
+                    {/foreach}
+                {/foreach}
+
+            </div>
+
+        {/if}
+
+
+    </div>
+{/block}
+
+

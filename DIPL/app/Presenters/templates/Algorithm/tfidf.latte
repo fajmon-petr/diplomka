@@ -1,0 +1,40 @@
+{block content}
+
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">TF-IDF</h1>
+    <p>
+        Algoritmus TF-IDF je metodika hodnocení relevance při vyhledávání v textu. TF znamená četnost slova v dokumentu a IDF znamená převrácenou četnost slova ve všech dokumentech. Každý produkt je reprezentován jako TF-IDF vektor.<br>
+        Na produkty, které uživatel prohlíží je aplikován algoritmus TF-IDF. Tato skupina je využita u jednotlivých přístupů.<br>
+    </p>
+    <div class="container">
+        <div class="row">
+            <table id="groupProducts">
+                <tr>
+                    <th>Název</th>
+                    <th>Podobnost</th>
+                    <th>Hodnocení</th>
+                    <th>Typ</th>
+                </tr>
+                {if $user->loggedIn}
+                {foreach $tfidf as $key => $tp}
+                        <tr>
+                            <td>
+                                <a class="text-info" n:href="Product:show $key">{$key}</a>
+                            </td>
+                            {foreach $tp as $value}
+                                {if $tp['similarity']}
+                                    <td>{$value}</td>
+                                {elseif $tp['rating']}
+                                    <td>{$value}</td>
+                                {elseif $tp['type']}
+                                    <td>{$value}</td>
+                                {/if}
+                            {/foreach}
+                        </tr>
+                {/foreach}
+                    {/if}
+            </table>
+        </div>
+    </div>
+
+
+{/block}

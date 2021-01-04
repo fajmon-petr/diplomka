@@ -1,0 +1,19 @@
+{block content}
+<h1>Historie</h1>
+
+{control addHistory}
+
+{foreach $time as $tim}
+    <table id="groupProducts">
+        <tr>
+            <th>{$tim->buy_time|date: "j. n. Y"}</th>
+        </tr>
+        {foreach $history as $his}
+            {if $his->buy_time==$tim->buy_time}
+                <tr>
+                    <td>{$his->product_id}</td>
+                </tr>
+            {/if}
+        {/foreach}
+    {/foreach}
+</table>

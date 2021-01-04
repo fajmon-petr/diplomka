@@ -1,0 +1,166 @@
+{block content}
+
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Přístup 2</h1>
+    <p>
+        Přístup 2 používá k vytvoření seznamu doporučených produktů procentuální podíl skupin na základě počtu hodnocí produktů uživatelem. Produkty jsou vybírány z "Moje top produkty" a "TF-IDF"<br>
+        Seznam je tvořen maximálně 40 produkty a jsou vybrány vždy top produkty dané skupiny.<br>
+        Např: 30%/70% značí 12 produktů z TF-IDF a 28 produktů z Moje top produkty.
+    </p>
+    <p>
+        Alespoň 5 produktů: TF-IDF 10%/90% Moje top produkty <br>
+        11 - 20 produktů: TF-IDF 30%/70% Moje top produkty <br>
+        21 - 30 produktů: TF-IDF 50%/50% Moje top produkty <br>
+        31 a více produktů: TF-IDF 70%/30% Moje top produkty <br>
+    </p>
+    <p><b>Všechny produkty mají jako výchozí hodnotu "Relevantní" pro změnu na "Nerelevantní" stačí provést změnu kliknutím na tlačítko.</b><br>Pokud je odezva moc dlouhá, je to ovlivněno hostingem.</p>
+    <p class="h2">Skupina A</p>
+
+    <div class="container">
+        <div class="tab">
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'A')" id="defaultOpen">Skupina A</button>
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'B')" >Skupina B</button>
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'C')" >Skupina C</button>
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'D')" >Skupina D</button>
+        </div>
+        {snippet access2}
+
+            <div id="A" class="tabcontent">
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {if empty($items1)} <p>Nedostatek ohodnocených produktů.</p> {/if}
+                        {foreach $items1 as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;">
+                                        <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                    <br>
+                                    {snippet item-$a}
+                                    {if $data['vote'] == 1}
+                                        <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                    {else}
+                                        <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                    {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+            <div id="B" class="tabcontent">
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {if empty($items2)} <p>Nedostatek ohodnocených produktů.</p> {/if}
+                        {foreach $items2 as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;">
+                                        <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                    <br>
+                                    {snippet item-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+            <div id="C" class="tabcontent">
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {if empty($items3)} <p>Nedostatek ohodnocených produktů.</p> {/if}
+                        {foreach $items3 as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;">
+                                        <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                    <br>
+                                    {snippet item-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+            <div id="D" class="tabcontent">
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {if empty($items4)} <p>Nedostatek ohodnocených produktů.</p> {/if}
+                        {foreach $items4 as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;">
+                                        <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                    <br>
+                                    {snippet item-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+
+        {/snippet}
+    </div>
+
+
+
+{/block}
+
+{block scripts}
+    {include parent}
+    <script>
+        function openInfo(evt, infoName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(infoName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+{/block}

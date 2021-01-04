@@ -1,0 +1,16 @@
+{block content}
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Kategorie</h1>
+    <div class="container">
+        <div class="row">
+            {foreach $categories as $category}
+                <div class="col-md-3 col-sm-6 p-0">
+                    <div class=" text-center m-1 img-thumbnail bg-light">
+                        <img class="rounded img-fluid" height="100px"  alt="Responsive image" src="{$basePath}/{$category->path}">
+                        <a class="text-info" n:href="Product:{$category->name}">{$category->full_name}</a>
+                    </div>
+                </div>
+            {/foreach}
+        </div>
+    </div>
+
+{/block}

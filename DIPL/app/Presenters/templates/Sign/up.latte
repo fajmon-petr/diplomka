@@ -1,0 +1,17 @@
+{block content}
+
+<form n:name=signUpForm class="login" method="post">
+    <ul class="errors p-0" n:if="$form->hasErrors()">
+        <div class="container">
+            <div class="alert alert-danger" >
+                <div class="mr-auto" n:foreach="$form->errors as $error">{$error}</div>
+            </div>
+        </div>
+    </ul>
+    <h1>Registrace</h1>
+    <p><label n:name=username><input n:name=username class="form-control" type="text" id="login" placeholder="Jméno"></label></p>
+    <p><label n:name=email><input n:name=email class="form-control" type="text" id="login" placeholder="Email"></label></p>
+    <p><label n:name=password><input n:name=password class="form-control" type="password" id="login" placeholder="Heslo"></label></p>
+    <p><label n:name=password><input n:name=passwordVerify class="form-control" type="password" id="login" placeholder="Heslo znovu"></label></p>
+    <p><input n:name=send class="btn btn-default"></p>
+</form>

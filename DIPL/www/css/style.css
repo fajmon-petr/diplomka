@@ -1,0 +1,90 @@
+table {
+    counter-reset: rowNumber;
+
+}
+
+table tr:not(:first-child) {
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before {
+    content: counter(rowNumber) ".";
+    min-width: 1em;
+    margin-right: 0.5em;
+
+}
+
+#groupProducts {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#groupProducts td, #groupProducts th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#groupProducts tr:hover {background-color: #ddd;}
+
+#groupProducts th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4c85af;
+    color: white;
+}
+
+/* ----LOGIN------ */
+.login {
+    width: 300px;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.login h1{
+    color: #000000;
+    font-weight: 500;
+    padding: 14px 10px;
+}
+
+.login input[type="text"],input[type="password"]{
+    background: none;
+    display: block;
+    text-align: center;
+    border: 2px solid #007bff;
+    padding: 14px 10px;
+    width: 200px;
+    outline: none;
+    color: #000000;
+    transition: .25s;
+}
+
+
+.login input[type="text"]:focus,input[type="password"]:focus{
+    border-color: #2ecc71;
+}
+
+.login input[type="submit"]{
+    background-color: #2ecc71;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #2ecc71;
+    padding: 6px 40px;
+    width: 200px;
+    outline: none;
+    color: #ffffff;
+    transition: .25s;
+    cursor: pointer;
+}
+
+.login input[type="submit"]:hover{
+    background: #2f9b49;
+    border: 2px solid #2f9b49;
+}
+

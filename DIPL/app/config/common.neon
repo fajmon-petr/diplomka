@@ -1,0 +1,32 @@
+parameters:
+
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+
+di:
+	export:
+		parameters: no
+		tags: no
+
+
+services:
+	router: App\Router\RouterFactory::createRouter
+	- App\Model\ProductManager
+	- App\Model\UserManager
+	- App\Model\VoteManager
+	- App\Model\HistoryManager
+	- App\Model\AlgorithmManager
+	- App\Services\MathService
+	- App\Services\Svd
+
+
+
+	authenticator: App\Model\MyAuthenticator

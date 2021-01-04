@@ -24,6 +24,8 @@ use App\Services\Svd;
 class AlgorithmPresenter extends Nette\Application\UI\Presenter
 {
 
+    //komentik
+
     private $productManager;
     private $userManager;
     private $voteManager;

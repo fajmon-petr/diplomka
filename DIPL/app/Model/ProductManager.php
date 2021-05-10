@@ -105,5 +105,36 @@ class ProductManager
         return $x;
     }
 
+    public function selectSvd($user){
+        return $this->database->table('svd')
+            ->select('*')
+            ->where('user_id', $user)
+            ->fetchAll();
+    }
+
+    public function saveSvd($user, $recommend){
+        foreach ($recommend as $title => $rating){
+            $this->database->table('svd')
+                ->insert([
+                   'user_id' => $user,
+                   'product' => $title,
+                    'similarity' => $rating,
+                ]);
+        }
+    }
+
+    public function deleteSvd($user){
+        return $this->database->table('svd')
+            ->where('user_id', $user)
+            ->delete();
+    }
+
+    public function svdExist($user){
+        return $this->database->table('svd')
+            ->select('user_id')
+            ->where('user_id', $user)
+            ->fetch();
+    }
+
 
 }

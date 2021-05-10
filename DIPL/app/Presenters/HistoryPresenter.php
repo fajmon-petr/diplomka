@@ -40,6 +40,8 @@ class HistoryPresenter extends Nette\Application\UI\Presenter
 
         }
 
+        $market = $this->session->getSection('market');
+        $this->template->cartCount = count($market->products);
         // $this->template->products = $this->productManager->getAll();
 
     }

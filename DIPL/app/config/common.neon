@@ -26,6 +26,9 @@ services:
 	- App\Model\AlgorithmManager
 	- App\Services\MathService
 	- App\Services\Svd
+	- App\Model\MasterManager
+	- App\Services\Lflc
+
 
 
 

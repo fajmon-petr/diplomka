@@ -1,0 +1,29 @@
+{block content}
+    <table id="groupProducts">
+        <tr>
+            <th>Název</th>
+            <th>Přístup</th>
+            <th>Skupina</th>
+            <th>Rel/Nerel</th>
+        </tr>
+        {foreach $control as $t}
+            <tr>
+                <td>
+                    {$t->product}
+                </td>
+                <td>
+                    {$t->access}
+                </td>
+                <td>
+                    {$t->party}
+                </td>
+                <td>
+                    {if $t->action == 0} NEREL {else} REL {/if}
+                </td>
+            </tr>
+
+        {/foreach}
+    </table>
+
+
+{/block}

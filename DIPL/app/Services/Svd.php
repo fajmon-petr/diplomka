@@ -7,6 +7,11 @@
  */
 
 namespace App\Services;
+use SciPhp\NumPhp as np;
+use Rubix\ML\CrossValidation\Metrics\RMSE;
+use Rubix\ML\Datasets\Labeled;
+use Rubix\ML\Regressors\KNNRegressor;
+use Rubix\ML\Datasets\Unlabeled;
 
 
 /**
@@ -134,7 +139,7 @@ class Svd {
 
     /**
      * maximum
-     *
+     *$k
      * @param integer $a
      * @param integer $b
      * @return integer
@@ -469,10 +474,22 @@ class Svd {
     }
 
     public function matrix($matrix){
+
         $matrixClass = new Svd;
 
-        $USV = $matrixClass->svd($matrix);
+//        $array = [
+//            ['1','1','1','0','0'],
+//            ['2','2','2','0','0'],
+//            ['1','1','1','0','0'],
+//            ['5','5','5','0','0'],
+//            ['0.1','0','0','3','3'],
+//            ['0.1','0','0','1','1']
+//        ];
+//
 
+
+//        $USV = $matrixClass->svd($matrix);
+        $USV = $matrixClass->svd($matrix);
         // calculate input matrix
         $input = $matrixClass->matrixMultiplication($USV['U'] ,$matrixClass->matrixMultiplication($USV['S'], $USV['V']));
         $input = $matrixClass->matrixRound($input);
@@ -480,18 +497,136 @@ class Svd {
         $Uk  = $matrixClass->matrixConstruct($USV['U'], count($USV['U']), $USV['K']);
         $Ukt = $matrixClass->matrixTranspose($Uk);
 
-        $tokensResults[] = 0;
+        $results[] = 0;
 
-        for($i = 0; $i < count($Ukt); $i++){
-            for($j = 0; $j < count($Ukt[0]); $j++){
-                if (isset($tokensResults[$j])){
-                    $tokensResults[$j] += $Ukt[$i][$j];
+
+
+        foreach ($input as $i => $data){
+            foreach ($data as $j => $value){
+                if (isset($results[$i])){
+                    $results[$i] +=  $value*$value;
                 }else{
-                    $tokensResults[$j] = $Ukt[$i][$j];
+                    $results[$i] = $value*$value;
+                }
+            }
+            $results[$i] = sqrt($results[$i]);
+        }
+        $magnitude = sqrt(array_sum($results));
+
+        $predict = np::dot($USV['U'], $USV['V']);
+        $predict = (array) $predict;
+
+//        $input = (array)$input;
+
+        $newPredict = [];
+        foreach ($predict as $i => $user){
+            foreach ($user as $j => $value){
+                foreach ($value as $k => $score){
+//                    $newPredict[$j][$k] = $score/($results[$j]*$magnitude);
+                    $newPredict[$j][$k] = $score;
                 }
             }
         }
+//        dump($newPredict);
+//        die();
+//        $u = np::dot($USV['U'],$USV['U']);
+//        $v = np::dot($USV['V'],$USV['V']);
+//        $sgrt = sqrt($u*$v);
+//        $sim = $predicted/$sgrt;
+//        dump($predict);
+//        die();
 
-        return $tokensResults;
+
+//        dump($predicted);
+//        die();
+//        dump($predicted);
+//        die();
+//        $testU = np::dot($USV['U'][1], $s);
+//        $v = $matrixClass->matrixTranspose($USV['V']);
+//        dump($v);
+//        $testV = np::dot($s, $v);
+//        $predicted = np::dot($testU, $testV);
+//        dump($USV['U'][1]);
+//        dump($matrixClass->matrixTranspose($USV['V'])[1]);
+
+//        dump($predicted);
+//        die();
+//            $predicted = np::dot($USV['U'],$USV['V']);
+//            dump($predicted);
+//            die();
+//        $end = microtime(true);
+//        dump($end-$start);
+//        die();
+//        dump($predicted);
+
+//        $array = (array)$predict;
+
+        foreach ($newPredict as $k => $ar){
+            foreach ($ar as $kk => $val){
+                $finalArray[$k][] = $val;
+            }
+        }
+
+
+//        dump($Ukt);
+//        echo "ukt";
+//        $tokensResults[] = 0;
+//
+//        for($i = 0; $i < count($Ukt); $i++){
+//            for($j = 0; $j < count($Ukt[0]); $j++){
+//                if (isset($tokensResults[$j])){
+//                    $tokensResults[$j] += $Ukt[$i][$j];
+//                }else{
+//                    $tokensResults[$j] = $Ukt[$i][$j];
+//                }
+//            }
+//        }
+//        dump($tokensResults);
+
+//        $samples = [
+//            [3, 4, 50.5],
+//            [1, 5, 24.7],
+//            [4, 4, 62.0],
+//            [3, 2, 31.1],
+//        ];
+
+        $samples = $newPredict;
+//        dump($samples);
+
+        foreach ($newPredict as $k => $i){
+            $labels[] = $k;
+        }
+//        dump($labels);
+
+
+        $dataset = new Labeled($samples, $labels);
+
+        $estimator = new KNNRegressor();
+
+        $estimator->train($dataset);
+
+//        $samples = [
+//            [4, 3, 44.2],
+//            [2, 2, 16.7],
+//            [2, 4, 19.5],
+//            [3, 3, 55.0],
+//        ];
+
+        $samples = $newPredict;
+
+        $dataset = new Unlabeled($samples);
+
+        $predictions = $estimator->predict($dataset);
+
+        $validator = new RMSE();
+
+        $score = $validator->score($predictions, $labels);
+
+
+        return $finalArray;
     }
+
+
+
+
 }

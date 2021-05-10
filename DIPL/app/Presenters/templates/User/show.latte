@@ -1,0 +1,31 @@
+{block content}
+    <div class="container">
+        <div class="row">
+            <a class="mb-2" n:href="User:results">
+                <button class="btn btn-primary">Zpět</button>
+            </a>
+            {foreach $results as $key => $result}
+            <table id="groupProducts" class="mb-2">
+                    <tr>
+                        <th>{$key}</th>
+                        <th>Skupina</th>
+                        <th>Celkem produktů</th>
+                        <th>Nerelevantní</th>
+                        <th>Procentuální podíl</th>
+                    </tr>
+                        {foreach $result as $time => $data}
+                            <tr>
+                                <td></td>
+                                <td>{$data['group']}</td>
+                                <td>{$data['count']}</td>
+                                <td>{$data['nerel']}</td>
+                                <td>{(($data['count']-$data['nerel'])/($data['count']))*100|number:0}%</td>
+                            </tr>
+                        {/foreach}
+                    </tr>
+            </table>
+            {/foreach}
+
+        </div>
+    </div>
+{/block}

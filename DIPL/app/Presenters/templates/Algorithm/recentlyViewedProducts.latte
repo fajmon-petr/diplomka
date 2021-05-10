@@ -43,9 +43,9 @@
     {foreach $time as $tim}
         <table id="groupProducts">
         <tr>
-            <th>{$tim->view_time|date: "j. n. Y"}</th>
-            <th>Navštíveno</th>
-            <th>Hodnocení</th>
+            <th style="width: 33%;">{$tim->view_time|date: "j. n. Y"}</th>
+            <th style="width: 33%;">Navštíveno</th>
+            <th style="width: 33%;">Hodnocení</th>
         </tr>
         {foreach $history as $his}
             {if $his->view_time==$tim->view_time}
@@ -56,7 +56,7 @@
                 </tr>
             {/if}
         {/foreach}
-    {/foreach}
     </table>
-
+        <div class="mb-3"></div>
+    {/foreach}
 {/block}

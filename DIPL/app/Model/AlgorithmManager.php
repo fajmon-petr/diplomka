@@ -10,6 +10,7 @@ namespace App\Model;
 use http\QueryString;
 use Nette;
 
+
 class AlgorithmManager
 {
     private $database;
@@ -109,32 +110,53 @@ class AlgorithmManager
 
     public function access1($array1, $array2, $percent){
 
+
         foreach ($array1 as $key => $value){
-            $array1[$key] = $value['rating'];
+            $array1[$key]['alg'] = 'Podobné prohlíženým produktům.';
         }
 
         foreach ($array2 as $key => $value){
-            $array2[$key] = floatval($value['rating']);
+            $array2[$key]['alg'] = 'V mých top produktech.';
+//            $array2[$key]['similarity'] = $array2[$key]['similarity'] * 10;
         }
-//
-//        $array1count = count($array1) * ($percent/100);
-//        $array2count = count($array2) * (1 - $percent/100);
+
+        $alg = $array1 + $array2;
+
+        foreach ($array1 as $key => $value){
+            $array1[$key] = $value['similarity'];
+        }
+
+        foreach ($array2 as $key => $value){
+            $array2[$key] = floatval($value['similarity']);
+        }
 
         $array1count = 40 * ($percent/100);
         $array2count = 40 * (1 - $percent/100);
-
 
         $array1 = array_slice($array1, 0, $array1count);
         $array2 = array_slice($array2, 0, $array2count);
 
         $access1 = $array1 + $array2;
-
         arsort($access1);
 
-        return $access1;
+        return array('access' => $access1, 'alg' => $alg);
     }
 
     public function access2($array1, $array2, $percent){
+        switch ($percent){
+            case 5:
+                $percent = 70;
+                break;
+            case 11:
+                $percent = 50;
+                break;
+            case 21:
+                $percent = 30;
+                break;
+            case 31:
+                $percent = 10;
+                break;
+        }
 
         $access2 = $this->access1($array1, $array2, $percent);
 
@@ -153,16 +175,19 @@ class AlgorithmManager
     }
 
     public function tfIdf($section, $index, $tfidf){
+
         $matchDocs = array();
         $docCount = count($index['docCount']);
+
         if (!empty($section)){
             foreach ($tfidf as $key => $item){
                 $query = explode(' ', $item['content']);
+
                 if ((key_exists('rating',$item) && $item['rating'] === 'nehodnoceno') || (key_exists('rating',$item) && $item['rating'] === 0)){
                     $rating = 0.5;
                 } else{
-                    if (key_exists('rating',$item) && $item['rating'] < 1){
-                        $rating = $item['rating'];
+                    if (key_exists('rating',$item) && $item['rating'] <= 1){
+                        $rating = $item['test'];
                     }else{
                         $rating = 1;
                     }
@@ -172,49 +197,160 @@ class AlgorithmManager
                         $entry = $index['dictionary'][$qterm];
                         foreach($entry['postings'] as $docID => $posting) {
                             if (isset($matchDocs[$key][$docID])){
-                                $matchDocs[$key][$docID] += ($posting['tf'] * log($docCount  / $entry['df'] , 2)) * $rating;
+                                $matchDocs[$key][$docID]['sim'] += (($posting['tf'] * log($docCount  / $entry['df'] , 2)) * $rating);
+                                if ($matchDocs[$key][$docID]['rating']<$rating){
+                                    if(key_exists('rating', $item)){
+                                        $matchDocs[$key][$docID]['rating'] = $item['rating'];
+                                    }else{
+                                        $matchDocs[$key][$docID]['rating'] = $rating;
+                                    }
+                                }
                             }else{
-                                $matchDocs[$key][$docID] = ($posting['tf'] * log($docCount  / $entry['df'] , 2)) * $rating;
+                                $matchDocs[$key][$docID]['sim'] = (($posting['tf'] * log($docCount  / $entry['df'] , 2)) * $rating);
+                                if(key_exists('rating', $item) && $item['rating']!='nehodnoceno'){
+                                    $matchDocs[$key][$docID]['rating'] = $item['rating'];
+                                }else{
+                                    $matchDocs[$key][$docID]['rating'] = $rating;
+                                }
                             }
+
+
                         }
                     }
                 }
             }
         }
 
+
         return $matchDocs;
     }
 
     public function getFinal($matchDocs, $index){
+//        dump($matchDocs);
+//        dump($index);
         $final = array();
         foreach ($matchDocs as $k => $matchDoc){
-            foreach($matchDoc as $docID => $score) {
-                if (!isset($final[$docID])){
-                    $final[$docID] = $score/$index['docCount'][$docID];
-                }else{
-                    $final[$docID] += $score/$index['docCount'][$docID];
+                foreach($matchDoc as $docID => $score) {
+                    if ($k != $docID){
+                    //dump($score['rating']);
+                    if (!isset($final[$docID])){
+                        $final[$docID]['sim'] = $score['sim']/$index['docCount'][$docID];
+
+//                        if ($score['sim']/$index['docCount'][$docID] > 0.2){
+//                            echo $k;
+//                            echo $docID;
+//                            dump($score['sim']/$index['docCount'][$docID]);
+//                        }
+                        $final[$docID]['rating'] = $score['rating'];
+                        $final[$docID]['count'] = 1;
+                    }else{
+                        $final[$docID]['sim'] += $score['sim']/$index['docCount'][$docID];
+
+//                        if ($score['sim']/$index['docCount'][$docID] > 0.2){
+//                            echo $k;
+//                            echo $docID;
+//                            dump($score['sim']/$index['docCount'][$docID]);
+//                        }
+                        if ($final[$docID]['rating'] < $score['rating']){
+                            $final[$docID]['rating'] = $score['rating'];
+                        }
+                        $final[$docID]['count'] = $final[$docID]['count'] + 1;
+                    }
+//                    $final[$docID]['sim'] = $final[$docID]['sim']/$final[$docID]['count'];
+//                    ($final[$docID]['sim'] > 1) ? $final[$docID]['sim']=1 : null;
                 }
             }
         }
+
+//        arsort($final);
+//        dump($final);
         return $final;
     }
 
     public function sortFinal($final, $products, $tfidf, $rank){
+
         foreach ($final as $key => $item){
-            if ($item <= $rank){
+            if ($item['sim'] <= $rank){
                 unset($final[$key]);
             }else{
                 foreach ($products as $product){
                     if ($product->title == $key){
                         $final[$key] = array(
-                            'similarity' => $item,
+                            'similarity' => $item['sim'],
                             'rating' => $product->rating,
-                            'type' => $product->category
+                            'type' => $product->category,
+                            'koeficient' => $item['rating'],
+                            'count' => $item['count'],
                         );
                     }
                 }
                 if (array_key_exists($key, $tfidf)){
                     unset($final[$key]);
+                }
+            }
+
+        }
+
+//        dump($final);
+        return $final;
+    }
+
+
+    public function saveGroup($user, $title, $vote, $time,$access, $party, $sim){
+        return $this->database->table('likes')
+            ->insert([
+               'user_id' => $user,
+               'product' => $title,
+               'action' => $vote,
+               'time' => $time,
+                'access' => $access,
+                'party' => $party,
+                'similarity' => $sim,
+            ]);
+    }
+
+
+    public function likeExists($user, $time, $access, $party){
+        return $this->database->table('likes')
+            ->select('*')
+            ->where('user_id', $user)
+            ->where('time', $time)
+            ->where('access', $access)
+            ->where('party', $party)
+            ->fetch();
+    }
+
+    public function deleteLikes($user, $time, $access, $party){
+        return $this->database->table('likes')
+            ->where('user_id', $user)
+            ->where('time', $time)
+            ->where('access', $access)
+            ->where('party', $party)
+            ->delete();
+    }
+
+    public function lastDate($user, $access, $party){
+        return $this->database->table('likes')
+            ->select('time')
+            ->where('user_id', $user)
+            ->where('access', $access)
+            ->where('party', $party);
+
+    }
+
+
+    public function getUserLikes($user){
+        return $this->database->table('likes')
+            ->select('*')
+            ->where('user_id', $user);
+    }
+
+    public function setTooltipAlg($final, $alg){
+
+        foreach ($final as $key => $fin){
+            foreach ($alg as $k => $al){
+                if ($key == $k){
+                    $final[$key]['alg'] = $al['alg'];
                 }
             }
         }

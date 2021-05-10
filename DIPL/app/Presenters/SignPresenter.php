@@ -15,6 +15,7 @@ use App\Model\UserManager;
 use App\Model\ProductManager;
 use App\Model\HistoryManager;
 use App\Model\VoteManager;
+use App\Model\MasterManager;
 
 class SignPresenter extends Nette\Application\UI\Presenter
 {
@@ -22,13 +23,23 @@ class SignPresenter extends Nette\Application\UI\Presenter
     private $userManager;
     private $historyManager;
     private $voteManager;
+    private $masterManager;
 
-    public function __construct(UserManager $userManager, ProductManager $productManager, HistoryManager $historyManager, VoteManager $voteManager)
+    /**
+     * SignPresenter constructor.
+     * @param UserManager $userManager
+     * @param ProductManager $productManager
+     * @param HistoryManager $historyManager
+     * @param VoteManager $voteManager
+     * @param MasterManager $masterManager
+     */
+    public function __construct(UserManager $userManager, ProductManager $productManager, HistoryManager $historyManager, VoteManager $voteManager, MasterManager $masterManager)
     {
         $this->userManager = $userManager;
         $this->productManager = $productManager;
         $this->historyManager = $historyManager;
         $this->voteManager = $voteManager;
+        $this->masterManager = $masterManager;
     }
 
     public function renderIn(){
@@ -72,7 +83,11 @@ class SignPresenter extends Nette\Application\UI\Presenter
 
             $this->userManager->createSimilarityUsers($this->getUser()->id);
             $this->createMyTopProducts();
-
+            $sessionSection->svd = $this->masterManager->svd($this->getUser()->id);
+//            $row = $this->voteManager->voteExists($this->getUser()->id);
+//            if ($row !== null){
+//                $this->masterManager->recreateSvd($this->getUser()->id, $sessionSection->svd);
+//            }
 
             $this->redirect('Homepage:');
             $this->flashMessage('Příhlášení proběhlo úspěšně');
@@ -121,6 +136,8 @@ class SignPresenter extends Nette\Application\UI\Presenter
         $this->getParameter('email');
         $this->getParameter('password');
 
+        $id = $this->userManager->getUserId($values->username, $values->email);
+        $this->userManager->createUserCategory($id);
 
         $this->redirect('Sign:in');
         //$this->redirect('Sign:in');
@@ -131,6 +148,7 @@ class SignPresenter extends Nette\Application\UI\Presenter
         $view = $this->getSession()->getSection('mySection');
         $user = $this->user->getIdentity()->getId();
         $this->historyManager->saveView($view, $user);
+        $this->getSession()->getSection('access5')->remove();
 
         $this->getUser()->logout();
         $this->flashMessage('Odlaseni probehlo uspesne');

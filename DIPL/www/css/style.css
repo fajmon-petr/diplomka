@@ -88,3 +88,21 @@ table tr td:first-child::before {
     border: 2px solid #2f9b49;
 }
 
+.cartCount{
+    color: black;
+}
+
+.productTitle{
+    display: inline-block;
+    width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cart{
+    background: none;
+    border: none;
+    display: inline-block;
+    width: 20%;
+}

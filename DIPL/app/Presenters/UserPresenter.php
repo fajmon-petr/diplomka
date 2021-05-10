@@ -8,22 +8,28 @@
 
 namespace App\Presenters;
 
+use App\Model\MasterManager;
 use Nette;
 use Nette\Application\UI\Form;
 use App\Model\UserManager;
 use App\Model\ProductManager;
 use App\Model\VoteManager;
+use App\Model\HistoryManager;
 class UserPresenter extends Nette\Application\UI\Presenter
 {
     private $userManager;
     private $productManager;
     private $voteManager;
+    private $historyManager;
+    private $masterManager;
 
-    public function __construct(UserManager $userManager, ProductManager $productManager, VoteManager $voteManager)
+    public function __construct(UserManager $userManager, ProductManager $productManager, VoteManager $voteManager, HistoryManager $historyManager, MasterManager $masterManager)
     {
         $this->userManager = $userManager;
         $this->productManager = $productManager;
         $this->voteManager = $voteManager;
+        $this->historyManager = $historyManager;
+        $this->masterManager = $masterManager;
     }
 
     public function renderDefault(): void
@@ -33,12 +39,119 @@ class UserPresenter extends Nette\Application\UI\Presenter
 
         $this->template->title = $this->productManager->getCategories();
 
+        $market = $this->session->getSection('market');
+        $this->template->cartCount = count($market->products);
 
         //$this->userManager->getOtherUsersCategories($this->getUser()->id);
         //$this->voteManager->getUserProductsVote();
         //$this->handleSimilarity();
         //$section = $this->session->getSection('mySection');
        // dump($section->userId);
+
+        $users = [90, 80, 68, 94, 83, 61, 84, 75, 89, 93, 76, 92, 74, 88, 78, 82, 64, 104, 101];
+
+        $topUsersCategory = $this->userManager->getTopUsersCategories($users);
+        $this->template->topUsers = $topUsersCategory;
+
+//        $this->masterManager->expertSystemInput2($this->getUser()->id);
+//        $this->masterManager->recreateSvd($this->getUser()->id);
+//
+//        $this->masterManager->phase2();
+//        $this->masterManager->phase2history();
+//        $this->masterManager->phase3();
+    }
+
+    public function renderResults(): void
+    {
+        $this->template->categories = $this->productManager->getCategories();
+
+        $users = $this->userManager->getAll();
+        foreach ($users as $user){
+            $u = $this->userManager->userLikeExists($user);
+            if ($u){
+                //dump($u);
+                $data[] = $user;
+            }
+        }
+        //dump($users);
+        $this->template->users = $data;
+
+        $market = $this->session->getSection('market');
+        $this->template->cartCount = count($market->products);
+    }
+
+    public function renderShow($id, $access): void
+    {
+        $this->template->categories = $this->productManager->getCategories();
+
+        $aa = array();
+        if ($access == 1){
+            $a = $this->userManager->results($id, $access, 'a');
+            $grupen[] = $a;
+            $b = $this->userManager->results($id, $access, 'b');
+            $grupen[] = $b;
+            $c = $this->userManager->results($id, $access, 'c');
+            $grupen[] = $c;
+        } elseif ($access == 2){
+            $a = $this->userManager->results($id, $access, 'a');
+            $grupen[] = $a;
+            $b = $this->userManager->results($id, $access, 'b');
+            $grupen[] = $b;
+            $c = $this->userManager->results($id, $access, 'c');
+            $grupen[] = $c;
+            $d = $this->userManager->results($id, $access, 'd');
+            $grupen[] = $d;
+        } elseif ($access == 3){
+            $a = $this->userManager->results($id, $access, 'a');
+            $grupen[] = $a;
+        } elseif ($access == 4) {
+            $a = $this->userManager->results($id, $access, 'a');
+            $grupen[] = $a;
+            $b = $this->userManager->results($id, $access, 'b');
+            $grupen[] = $b;
+        }elseif ($access == 5) {
+            $a = $this->userManager->results($id, $access, 'a');
+            $grupen[] = $a;
+            $b = $this->userManager->results($id, $access, 'b');
+            $grupen[] = $b;
+        }
+
+        $time = $this->userManager->time();
+        foreach ($time as $tim) {
+            foreach ($grupen as $grup) {
+                foreach ($grup as $key => $gr) {
+                    if ($tim == $key) {
+                        $aa[$tim][$gr['group']] = $gr;
+                    }
+                }
+            }
+        }
+        //dump($aa);
+
+        $this->template->results = $aa;
+
+        $market = $this->session->getSection('market');
+        $this->template->cartCount = count($market->products);
+    }
+
+    public function renderInfo($id){
+
+        $categories = $this->productManager->getCategories();
+        $this->template->categories = $categories;
+
+        $userCategories = $this->masterManager->getNamesOfUserCategories($id, $categories);
+
+        $this->template->userCategories = $userCategories;
+        $this->template->crew = $this->masterManager->getCrewNames($id);
+
+        $this->template->history = $this->historyManager->getHistoryById($id);
+        $this->template->time = $this->historyManager->getTime($id);
+//        $this->template->times = $this->historyManager->getTimeView($this->getUser()->id);
+        $this->template->view = $this->historyManager->getViewById($id);
+
+        $market = $this->session->getSection('market');
+        $this->template->cartCount = count($market->products);
+
     }
 
 

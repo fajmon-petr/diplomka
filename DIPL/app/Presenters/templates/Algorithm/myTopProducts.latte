@@ -18,26 +18,15 @@
                         <td>
                             <a class="text-info" n:href="Product:show $key">{$key}</a>
                         </td>
-                        {foreach $tp as $name => $value}
-                            {if $name == type}
-                                {foreach $categories as $cat}
-                                    {if $value == $cat->name}
-                                        <td>
-                                            {$cat->full_name}
-                                        </td>
-                                    {/if}
-                                {/foreach}
-                            {elseif $name == count}
-                                <td>
-                                    {$value}
-                                </td>
-                            {else}
-                                <td>
-                                    {$value}
-                                </td>
-                            {/if}
-                        {/foreach}
-
+                        <td>
+                            {$tp['count']}
+                        </td>
+                        <td>
+                            {$tp['rating']}
+                        </td>
+                        <td>
+                            {$tp['category']}
+                        </td>
                     </tr>
                 {/foreach}
             </table>

@@ -1,0 +1,128 @@
+{block content}
+    <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Moje top produkty k historii nákupu</h1>
+    <p>
+        Přístup 4 používá k vytvoření seznamu doporučených produktů historii nákupů aktivního uživatele a aplikuje na ně algoritmus TF-IDF<br>
+        Seznam je tvořen maximálně 100 produkty a jsou vybrány top produkty podle podobnosti.<br>
+    </p>
+    <p>
+        <b>Skupina A:</b> Produkty získávají koeficient na základě počtu produktů v historii. (maximální počet 20 produktů)
+        Příklad: v historii je 15 produktů, 15/20 = 0,75 / 2 = 0,375. Tento koeficient se přičte k produktům. <br>
+        <b>Skupina B:</b> Produkty, které mají stejnou kategorii, jako jsou kategorie obsažené v historii nákupů, získavají navíc koeficient +0.5.
+    </p>
+    <p><b>Všechny produkty mají jako výchozí hodnotu "Relevantní" pro změnu na "Nerelevantní" stačí provést změnu kliknutím na tlačítko.</b><br>Pokud je odezva moc dlouhá, je to ovlivněno hostingem.</p>
+
+    <div class="container">
+        <div class="tab">
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'A')" id="defaultOpen">Skupina A</button>
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'B')" >Skupina B</button>
+
+        </div>
+        {snippet access2}
+            <div id="A" class="tabcontent">
+                <div class="mt-1 mb-1">
+                    <a n:href="save! '4', 'a'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+                </div>
+                <div>
+                    <span>{ifset $dateA}Naposledy odesláno: {$dateA}{/ifset}</span>
+                </div>
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {foreach $similarA as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;" title="Důvod zobrazení: &#013;{$data['alg']} &#013;">
+                                        <img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <br>
+                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                    <br>
+                                    <span class="badge badge-pill badge-primary">{$data['alg2']}</span>
+                                    <br>
+                                    <span class="badge badge-pill badge-primary">{$data['alg3']}</span>
+                                    <br>
+                                    {snippet item-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+            <div id="B" class="tabcontent">
+                <div class="mt-1 mb-1">
+                    <a n:href="save! '4', 'b'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+                </div>
+                <div>
+                    <span>{ifset $dateB}Naposledy odesláno: {$dateB}{/ifset}</span>
+                </div>
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {foreach $similarB as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;" title="Důvod zobrazení: &#013;{$data['alg']} &#013;">
+                                        <img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+
+                                    <br>
+                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
+
+                                    <br>
+                                    <span class="badge badge-pill badge-primary">{$data['alg2']}</span>
+                                    <br>
+                                    <span class="badge badge-pill badge-primary">{$data['alg3']}</span>
+                                    <br>
+                                    <span class="badge badge-pill badge-primary img-fluid">{$data['alg']}</span>
+                                    <br>
+                                    {snippet item2-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+        {/snippet}
+    </div>
+
+{/block}
+{block scripts}
+    {include parent}
+    <script>
+        function openInfo(evt, infoName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(infoName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+{/block}

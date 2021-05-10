@@ -1,11 +1,27 @@
 {block content}
     <h1 class="text-center col-sm mt-2 img-thumbnail bg-light" n:block="title">Moje top produkty k historii nákupu</h1>
     <p>
-        Přístup 3 používá k vytvoření seznamu doporučených produktů historii nákupů aktivního uživatele a plakuje na ně algoritmus TF-IDF<br>
+        Přístup 3 používá k vytvoření seznamu doporučených produktů historii nákupů aktivního uživatele a aplikuje na ně algoritmus TF-IDF<br>
         Seznam je tvořen maximálně 100 produkty a jsou vybrány top produkty podle podobnosti.<br>
     </p>
+    <p>
+        Produkdy zakoupené <b>dnes</b>: Koeficient <b>1</b> <br>
+        Produkty zakoupené <b>do 7 dní</b>: Koeficient <b>0.7</b> <br>
+        Produkty zakoupené <b>do 30 dní</b>: Koeficient <b>0.5</b> <br>
+        Produkty zakoupené <b>do 90 dní</b>: Koeficient <b>0.2</b> <br>
+        Produkty zakoupené <b>déle jak 90 dní</b>: Nemají vliv na algoritmus TF-IDF <br>
+    </p>
+    <p><b>Všechny produkty mají jako výchozí hodnotu "Relevantní" pro změnu na "Nerelevantní" stačí provést změnu kliknutím na tlačítko.</b><br>Pokud je odezva moc dlouhá, je to ovlivněno hostingem.</p>
+
+
     {snippet access2}
         <div class="container">
+            <div class="mt-1 mb-1">
+                <a n:href="save! '3', 'a'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+            </div>
+            <div>
+                <span>{ifset $dateA}Naposledy odesláno: {$dateA}{/ifset}</span>
+            </div>
             <div class="row">
                 <table id="groupProducts" style="width: 33.3%;">
                     {foreach $similar as $name => $data}
@@ -15,6 +31,10 @@
                                     <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
                                 </div>
                                 <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                <br>
+                                <span class="text">sim: {$data['similarity']|number:2}</span>
+                                <br>
+                                <span class="text">koef: {$data['koeficient']|number:1}</span>
                                 <br>
                                 {snippet item-$a}
                                     {if $data['vote'] == 1}
@@ -32,43 +52,4 @@
             </div>
         </div>
     {/snippet}
-    {*<div class="container">*}
-        {*<div class="row">*}
-            {*<table id="groupProducts">*}
-                {*<tr>*}
-                    {*<th>Název</th>*}
-                    {*<th>Podobnost</th>*}
-                    {*<th>Hodnocení</th>*}
-                    {*<th>Typ</th>*}
-                {*</tr>*}
-                {*{foreach $similar as $key => $sim}*}
-                    {*<tr>*}
-                        {*<td>*}
-                            {*<a class="text-info" n:href="Product:show $key">{$key}</a>*}
-                        {*</td>*}
-                        {*{foreach $sim as $name => $value}*}
-                            {*{if $name == type}*}
-                                {*{foreach $categories as $cat}*}
-                                    {*{if $value == $cat->name}*}
-                                        {*<td>*}
-                                            {*{$cat->full_name}*}
-                                        {*</td>*}
-                                    {*{/if}*}
-                                {*{/foreach}*}
-                            {*{elseif $name == similarity}*}
-                                {*<td>*}
-                                    {*{$value}*}
-                                {*</td>*}
-                            {*{else}*}
-                                {*<td>*}
-                                    {*{$value}*}
-                                {*</td>*}
-                            {*{/if}*}
-                        {*{/foreach}*}
-
-                    {*</tr>*}
-                {*{/foreach}*}
-            {*</table>*}
-        {*</div>*}
-    {*</div>*}
 {/block}

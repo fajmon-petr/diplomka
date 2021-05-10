@@ -6,6 +6,27 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Zephir\\Optimizers\\FunctionCall\\' => array($vendorDir . '/rubix/tensor/optimizers'),
+    'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
+    'Tensor\\' => array($vendorDir . '/rubix/tensor/src'),
     'Symfony\\Thanks\\' => array($vendorDir . '/symfony/thanks/src'),
+    'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
+    'Symfony\\Polyfill\\Php73\\' => array($vendorDir . '/symfony/polyfill-php73'),
+    'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
+    'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
+    'SciPhp\\' => array($vendorDir . '/sciphp/numphp/src/SciPhp'),
+    'SciPhpTest\\' => array($vendorDir . '/sciphp/numphp/test'),
+    'Rubix\\ML\\' => array($vendorDir . '/rubix/ml/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
+    'League\\MimeTypeDetection\\' => array($vendorDir . '/league/mime-type-detection/src'),
+    'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
+    'JAMA\\' => array($vendorDir . '/rubix/tensor/lib/JAMA'),
     'App\\' => array($baseDir . '/app'),
+    'Amp\\Sync\\' => array($vendorDir . '/amphp/sync/src'),
+    'Amp\\Serialization\\' => array($vendorDir . '/amphp/serialization/src'),
+    'Amp\\Process\\' => array($vendorDir . '/amphp/process/lib'),
+    'Amp\\Parser\\' => array($vendorDir . '/amphp/parser/lib'),
+    'Amp\\Parallel\\' => array($vendorDir . '/amphp/parallel/lib'),
+    'Amp\\ByteStream\\' => array($vendorDir . '/amphp/byte-stream/lib'),
+    'Amp\\' => array($vendorDir . '/amphp/amp/lib'),
 );

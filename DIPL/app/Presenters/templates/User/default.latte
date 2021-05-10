@@ -1,11 +1,11 @@
 {block content}
     <h1 n:block="title">Nastaveni</h1>
     {if $user->loggedIn && $user->getIdentity()->id === 4}
-    {control generateVote}
+    {*{control generateVote}*}
 
-    {control generateCategory}
+    {*{control generateCategory}*}
 
-    {control generateRate}
+    {*{control generateRate}*}
 
     {*<a n:href="similarity!"><button>Similarity</button></a>*}
     {/if}

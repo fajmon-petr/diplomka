@@ -3,14 +3,6 @@
 
     <h1>Nákupní košík</h1>
     <div class="row">
-        {*{foreach $cart as $key => $item}*}
-        {*{foreach $products as $product}*}
-        {*{if $key == $product->product_id}*}
-        {**}
-        {*{/if}*}
-        {*{/foreach}*}
-        {*{/foreach}*}
-
         <table id="groupProducts">
             <tr>
                 <th>Název</th>
@@ -29,7 +21,7 @@
                 </tr>
             {/foreach}
         </table>
-        <div style="width: 100%">
+        <div class="mt-2" style="width: 100%">
             <a n:href="Buy!"><input type="button" class="btn btn-primary" value="Zakoupit" style="float: right"></a>
         </div>
 

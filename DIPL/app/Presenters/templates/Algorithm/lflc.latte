@@ -1,0 +1,170 @@
+{block content}
+    <div class="container">
+        <div class="tab">
+            <button class="tablinks btn btn-primary" onclick="openInfo(event, 'A')" id="defaultOpen">Skupina A</button>
+            {*<button class="tablinks btn btn-primary" onclick="openInfo(event, 'B')" >Skupina B</button>*}
+
+        </div>
+        {snippet access2}
+            <div id="A" class="tabcontent">
+                <div class="row">
+                    <div class="mt-2 mb-2 ml-3">
+                        <a n:href="save! '5', 'a'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+                    </div>
+                    <div class="m-2">
+                        <a n:href="recreateLflc!" ><button type="button" class="btn btn-info">Přepočítat výsledky</button></a>
+                    </div>
+                </div>
+                <div>
+                    <span>{ifset $dateA}Naposledy odesláno: {$dateA}{/ifset}</span>
+                </div>
+                <div class="row">
+                    <table id="groupProducts" style="width: 33.3%;">
+                        {foreach $lflc as $name => $data}
+                            <div class="col-md-3 col-sm-6 p-0" {$a = $data['product_id']}>
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    {*<div style="height: 116px;" title="Produkt se zobrazuje, protože:&#013;{$data['alg']} &#013;{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}">*}
+                                    <div style="height: 116px;">
+                                        <img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <div class="mb-2">
+                                        <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                        <br>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{$data['sim']|number:3}</span>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{if $data['rating'] > 3.5}Hodnocení je -> {$data['rating']} &#013;{/if}</span>
+                                    </div>
+                                    {snippet item-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name, 5" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name, 5" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+                                </div>
+                            </div>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+
+            {*<div id="B" class="tabcontent">*}
+                {*<div class="row">*}
+                    {*<div class="mt-2 mb-2 ml-3">*}
+                        {*<a n:href="save! '5', 'b'" ><button type="button" class="btn btn-success">Odeslat</button></a>*}
+                    {*</div>*}
+                    {*<div class="m-2">*}
+                        {*<a n:href="recreateLflc!" ><button type="button" class="btn btn-info">Přepočítat výsledky</button></a>*}
+                    {*</div>*}
+                {*</div>*}
+                {*<div>*}
+                    {*<span>{ifset $dateB}Naposledy odesláno: {$dateB}{/ifset}</span>*}
+                {*</div>*}
+                {*<div class="row">*}
+                    {*<table id="groupProducts" style="width: 33.3%;">*}
+                        {*{foreach $lflc2 as $name => $data}*}
+                            {*<div class="col-md-3 col-sm-6 p-0" {$a = $data['product_id']}>*}
+                                {*<div class=" text-center m-1 img-thumbnail bg-light" >*}
+                                    {*<div style="height: 116px;" title="Produkt se zobrazuje, protože:&#013;{$data['alg']} &#013;{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}">*}
+                                    {*<div style="height: 116px;">*}
+                                        {*<img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">*}
+                                    {*</div>*}
+                                    {*<div class="mb-2">*}
+                                        {*<a class="text-info" n:href="Product:show $name">{$name}</a>*}
+                                        {*<br>*}
+                                        {*<br>*}
+                                        {*<span class="badge badge-pill badge-primary">{$data['sim']|number:3}</span>*}
+                                        {*<br>*}
+                                        {*<span class="badge badge-pill badge-primary">{if $data['rating'] > 3.5}Hodnocení je -> {$data['rating']} &#013;{/if}</span>*}
+                                    {*</div>*}
+                                    {*{snippet item1-$a}*}
+                                        {*{if $data['vote'] == 1}*}
+                                            {*<a class="ajax" n:href="unlike! $name, 5" ><button type="button" class="btn btn-success">Relevantní</button></a>*}
+                                        {*{else}*}
+                                            {*<a class="ajax" n:href="like! $name, 5" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>*}
+                                        {*{/if}*}
+                                    {*{/snippet}*}
+                                {*</div>*}
+                            {*</div>*}
+                        {*{/foreach}*}
+                    {*</table>*}
+                {*</div>*}
+            {*</div>*}
+
+        {/snippet}
+    </div>
+
+{*{snippet access2}*}
+    {*<div id="A" class="tabcontent">*}
+        {*<div class="row">*}
+            {*<div class="m-2">*}
+                {*<a n:href="save! '5', 'a'" ><button type="button" class="btn btn-success">Odeslat</button></a>*}
+            {*</div>*}
+            {*<div class="m-2">*}
+                {*<a n:href="recreateLflc!" ><button type="button" class="btn btn-info">Přepočítat výsledky</button></a>*}
+            {*</div>*}
+        {*</div>*}
+        {*<div>*}
+            {*<span>{ifset $dateA}Naposledy odesláno: {$dateA}{/ifset}</span>*}
+        {*</div>*}
+        {*<div class="row">*}
+            {*<table id="groupProducts" style="width: 33.3%;">*}
+                {*{foreach $lflc as $name => $data}*}
+                    {*<div class="col-md-3 col-sm-6 p-0" {$a = $data['product_id']}>*}
+                        {*<div class=" text-center m-1 img-thumbnail bg-light" >*}
+                            {*<div style="height: 116px;" title="Produkt se zobrazuje, protože:&#013;{$data['alg']} &#013;{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}">*}
+                            {*<div style="height: 116px;">*}
+                                {*<img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">*}
+                            {*</div>*}
+                            {*<div class="mb-2">*}
+                                {*<a class="text-info" n:href="Product:show $name">{$name}</a>*}
+                                {*<br>*}
+                                {*<br>*}
+                                {*<span class="badge badge-pill badge-primary">{$data['sim']|number:3}</span>*}
+                                {*<br>*}
+                                {*<span class="badge badge-pill badge-primary">{if $data['rating'] > 3.5}Hodnocení je -> {$data['rating']} &#013;{/if}</span>*}
+                            {*</div>*}
+                            {*{snippet item-$a}*}
+                                {*{if $data['vote'] == 1}*}
+                                    {*<a class="ajax" n:href="unlike! $name, 5" ><button type="button" class="btn btn-success">Relevantní</button></a>*}
+                                {*{else}*}
+                                    {*<a class="ajax" n:href="like! $name, 5" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>*}
+                                {*{/if}*}
+                            {*{/snippet}*}
+                        {*</div>*}
+                    {*</div>*}
+                {*{/foreach}*}
+            {*</table>*}
+        {*</div>*}
+    {*</div>*}
+{*{/snippet}*}
+{/block}
+{block scripts}
+    {include parent}
+    <script>
+        function openInfo(evt, infoName) {
+            // Declare all variables
+            var i, tabcontent, tablinks;
+
+            // Get all elements with class="tabcontent" and hide them
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Get all elements with class="tablinks" and remove the class "active"
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab, and add an "active" class to the button that opened the tab
+            document.getElementById(infoName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+{/block}

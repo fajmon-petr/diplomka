@@ -1,0 +1,54 @@
+{block content}
+
+    <div class="container" xmlns="http://www.w3.org/1999/html">
+        <div class="row">
+            <a class="mb-2" n:href="User:results">
+                <button class="btn btn-primary">Zpět</button>
+            </a>
+            <table id="groupProducts" class="mb-3">
+                <tr>
+                    <th>Kategorie</th>
+                </tr>
+                {foreach $userCategories as $uc}
+                    <tr>
+                        <td>{$uc}</td>
+                    </tr>
+                {/foreach}
+            </table>
+            <table id="groupProducts" class="mb-3">
+                <tr>
+                    <th>Podobný uživatel</th>
+                </tr>
+                {foreach $crew as $cr}
+                    <tr>
+                        <td>{$cr}</td>
+                    </tr>
+                {/foreach}
+            </table>
+            {foreach $time as $tim}
+            <table id="groupProducts">
+                <tr>
+                    <th>Historie - {$tim->buy_time|date: "j. n. Y"}</th>
+                </tr>
+                {foreach $history as $his}
+                    {if $his->buy_time==$tim->buy_time}
+                        <tr>
+                            <td>{$his->product_id}</td>
+                        </tr>
+                    {/if}
+                {/foreach}
+                {/foreach}
+            </table>
+            <table id="groupProducts" class="mb-3">
+                <tr>
+                    <th>Prohlížení</th>
+                </tr>
+                {foreach $view as $vw}
+                    <tr>
+                        <td>{$vw->product_id}</td>
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+{/block}

@@ -20,15 +20,9 @@
                             <td>
                                 <a class="text-info" n:href="Product:show $key">{$key}</a>
                             </td>
-                            {foreach $tp as $value}
-                                {if $tp['similarity']}
-                                    <td>{$value}</td>
-                                {elseif $tp['rating']}
-                                    <td>{$value}</td>
-                                {elseif $tp['type']}
-                                    <td>{$value}</td>
-                                {/if}
-                            {/foreach}
+                                <td>{$tp['similarity']}</td>
+                                <td>{$tp['rating']}</td>
+                                <td>{$tp['type']}</td>
                         </tr>
                 {/foreach}
                     {/if}

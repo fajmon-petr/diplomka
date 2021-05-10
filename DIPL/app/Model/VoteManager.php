@@ -7,6 +7,7 @@
  */
 
 namespace App\Model;
+use MongoDB\BSON\MaxKey;
 use Nette;
 
 class VoteManager
@@ -92,6 +93,7 @@ class VoteManager
         return $files;
     }
 
+
     public function countRating($productId){
         return $this->database->table('vote')
             ->where('product_id', $productId)
@@ -118,7 +120,8 @@ class VoteManager
     public function getUserProductsVote($userId){
         return $this->database->table('vote')
             ->select('*')
-            ->where('user_id = ?', $userId);
+            ->where('user_id = ?', $userId)
+            ->fetchAll();
     }
 
     public function userProductsVote($i){
@@ -147,11 +150,24 @@ class VoteManager
             ->delete();
     }
 
+    public function deleteVotes($user){
+        return $this->database->table('vote')
+            ->where('user_id', $user)
+            ->delete();
+    }
+
     public function likeExists($productId, $user){
         return $this->database->table('likes')
             ->select('*')
             ->where('user_id', $user)
             ->where('product', $productId)
+            ->fetch();
+    }
+
+    public function voteExists($user){
+        return $this->database->table('vote')
+            ->select('*')
+            ->where('user_id', $user)
             ->fetch();
     }
 
@@ -167,7 +183,8 @@ class VoteManager
     public function getLikes($user){
         return $this->database->table('likes')
             ->select('*')
-            ->where('user_id', $user);
+            ->where('user_id = ?', $user)
+            ->fetchAll();
     }
 
     public function top100($product, $myCat){

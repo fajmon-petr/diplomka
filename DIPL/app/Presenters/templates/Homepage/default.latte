@@ -1,19 +1,43 @@
 {block content}
-    <h1 n:block="title">e-shop</h1>
-    <div class="container">
-    <div class="row">
-    {foreach $products as $product}
-        {foreach $topProducts as  $topProduct}
-            {if $topProduct['id'] == $product->product_id}
-                <div class="col-md-3 col-sm-6 p-0">
-                    <div class=" text-center m-1 img-thumbnail bg-light">
-                        <div style="height: 116px;">
-                            <img class="rounded img-fluid mh-100" height="100px"  alt="{$product->title}" src="{$basePath}/{$product->path}">
+    <h1 n:block="title">Hlavní stránka</h1>
+
+    {if $user->loggedIn}
+        <div class="container">
+        <div class="row">
+        {foreach $myTopProducts as $key => $myTopProduct}
+            {foreach $products as $product}
+                {if $key == $product->title}
+                    <div class="col-md-3 col-sm-6 p-0">
+                        <div class=" text-center m-1 img-thumbnail bg-light">
+                            <div style="height: 116px;" data-toggle="tooltip" title="Rating produktu: {$myTopProduct['totalRating']} &#013;Hodnocení produktu: {$myTopProduct['rating']} &#013;Uživatelský koeficient: {$myTopProduct['koeficient']}">
+                                <img class="rounded img-fluid mh-100" height="100px" alt="{$product->title}" src="{$basePath}/{$product->path}">
+                            </div>
+                            <a class="text-info" n:href="Product:show $product->title ">{$product->title}</a>
+                            <br>
+                            <span class="badge badge-pill badge-primary">{$myTopProduct['rating']}</span>
                         </div>
-                        <a class="text-info" n:href="Product:show $product->title ">{$product->title}</a>
                     </div>
-                </div>
-            {/if}
+                {/if}
+            {/foreach}
         {/foreach}
-    {/foreach}
+
+        {else}
+        <div class="container">
+        <div class="row">
+        {foreach $topProducts as $k => $topProduct}
+            {foreach $products as $product}
+                {if $k == $product->title}
+                    <div class="col-md-3 col-sm-6 p-0">
+                        <div class=" text-center m-1 img-thumbnail bg-light">
+                            <div style="height: 116px;" data-toggle="tooltip" title="Rating produktu: {$topProduct['totalRating']} &#013;Hodnocení produktu: {$topProduct['rating']} &#013;Počet hodnocení: {$topProduct['count']}">
+                                <img class="rounded img-fluid mh-100" height="100px" alt="{$product->title}" src="{$basePath}/{$product->path}">
+                            </div>
+                            <a class="text-info" n:href="Product:show $product->title ">{$product->title}</a>
+                        </div>
+                    </div>
+                {/if}
+            {/foreach}
+        {/foreach}
+    {/if}
+
 {/block}

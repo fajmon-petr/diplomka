@@ -21,51 +21,73 @@
         </div>
         {snippet access2}
             <div id="A" class="tabcontent">
+                <div class="mt-1 mb-1">
+                    <a n:href="save! '1', 'a'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+                </div>
+                <div>
+                    <span>{ifset $dateA}Naposledy odesláno: {$dateA}{/ifset}</span>
+                </div>
                 <div class="row">
                     <table id="groupProducts" style="width: 33.3%;">
                         {foreach $percent30 as $name => $data}
-                                <div class="col-md-3 col-sm-6 p-0" {$a = $data['product_id']}>
-                                    <div class=" text-center m-1 img-thumbnail bg-light" >
-                                        <div style="height: 116px;">
-                                            <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
-                                        </div>
+                            <div class="col-md-3 col-sm-6 p-0" {$a = $data['product_id']}>
+                                <div class=" text-center m-1 img-thumbnail bg-light" >
+                                    <div style="height: 116px;" title="Produkt se zobrazuje, protože:&#013;{$data['alg']} &#013;{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}">
+                                        <img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    </div>
+                                    <div class="mb-2">
                                         <a class="text-info" n:href="Product:show $name">{$name}</a>
                                         <br>
-
-                                            {snippet item-$a}
-                                                {if $data['vote'] == 1}
-                                                    <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
-                                                {else}
-                                                    <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
-                                                {/if}
-                                            {/snippet}
-
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{$data['alg']}</span>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}</span>
                                     </div>
+                                    {snippet item-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
+
                                 </div>
+                            </div>
                         {/foreach}
                     </table>
                 </div>
             </div>
 
             <div id="B" class="tabcontent">
+                <div class="mt-1 mb-1">
+                    <a n:href="save! '1', 'b'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+                </div>
+                <div>
+                    <span>{if $dateB != null}Naposledy odesláno: {$dateB}{/if}</span>
+                </div>
                 <div class="row">
                     <table id="groupProducts" style="width: 33.3%;">
                         {foreach $percent50 as $name => $data}
                             <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
                                 <div class=" text-center m-1 img-thumbnail bg-light" >
-                                    <div style="height: 116px;">
-                                        <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    <div style="height: 116px;" title="Produkt se zobrazuje, protože:&#013;{$data['alg']} &#013;{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}">
+                                        <img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">
                                     </div>
-                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
-                                    <br>
-
-                                        {snippet item2-$a}
-                                            {if $data['vote'] == 1}
-                                                <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
-                                            {else}
-                                                <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
-                                            {/if}
-                                        {/snippet}
+                                    <div class="mb-2">
+                                        <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                        <br>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{$data['alg']}</span>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}</span>
+                                    </div>
+                                    {snippet item2-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
 
                                 </div>
                             </div>
@@ -75,24 +97,35 @@
             </div>
 
             <div id="C" class="tabcontent">
+                <div class="mt-1 mb-1">
+                    <a n:href="save! '1', 'c'" ><button type="button" class="btn btn-success">Odeslat</button></a>
+                </div>
+                <div>
+                    <span>{ifset $dateC}Naposledy odesláno: {$dateC}{/ifset}</span>
+                </div>
                 <div class="row">
                     <table id="groupProducts" style="width: 33.3%;">
                         {foreach $percent70 as $name => $data}
                             <div class="col-md-3 col-sm-6 p-0 {$a = $data['product_id']}">
                                 <div class=" text-center m-1 img-thumbnail bg-light" >
-                                    <div style="height: 116px;">
-                                        <img class="rounded img-fluid mh-100" alt="{$name}" src="{$basePath}/{$data['path']}">
+                                    <div style="height: 116px;" title="Produkt se zobrazuje, protože:&#013;{$data['alg']} &#013;{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}">
+                                        <img class="rounded img-fluid mh-100" height="100px" alt="{$name}" src="{$basePath}/{$data['path']}">
                                     </div>
-                                    <a class="text-info" n:href="Product:show $name">{$name}</a>
-                                    <br>
-
-                                        {snippet item3-$a}
-                                            {if $data['vote'] == 1}
-                                                <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
-                                            {else}
-                                                <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
-                                            {/if}
-                                        {/snippet}
+                                    <div class="mb-2">
+                                        <a class="text-info" n:href="Product:show $name">{$name}</a>
+                                        <br>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{$data['alg']}</span>
+                                        <br>
+                                        <span class="badge badge-pill badge-primary">{if $data['product_rate'] > 3.5}Hodnocení je -> {$data['product_rate']} &#013;{/if}</span>
+                                    </div>
+                                    {snippet item3-$a}
+                                        {if $data['vote'] == 1}
+                                            <a class="ajax" n:href="unlike! $name" ><button type="button" class="btn btn-success">Relevantní</button></a>
+                                        {else}
+                                            <a class="ajax" n:href="like! $name" ><button type="button" class="btn btn-danger">Nerelevantní</button></a>
+                                        {/if}
+                                    {/snippet}
 
                                 </div>
                             </div>
@@ -101,7 +134,7 @@
                 </div>
             </div>
 
-    {/snippet}
+        {/snippet}
     </div>
 
 
@@ -138,45 +171,45 @@
 
 {*Skupina A*}
 {*<table id="groupProducts">*}
-    {*<tr>*}
-        {*<th>Název</th>*}
-        {*<th>Podobnost</th>*}
-        {*<th>Hodnocení</th>*}
-        {*<th>Typ</th>*}
-    {*</tr>*}
-    {*{foreach $percent30 as $k => $p}*}
-        {*<tr>*}
-            {*<td>{$k}</td>*}
-        {*</tr>*}
-    {*{/foreach}*}
+{*<tr>*}
+{*<th>Název</th>*}
+{*<th>Podobnost</th>*}
+{*<th>Hodnocení</th>*}
+{*<th>Typ</th>*}
+{*</tr>*}
+{*{foreach $percent30 as $k => $p}*}
+{*<tr>*}
+{*<td>{$k}</td>*}
+{*</tr>*}
+{*{/foreach}*}
 {*</table>*}
 {*Skupina B*}
 {*<table id="groupProducts">*}
-    {*<tr>*}
-        {*<th>Název</th>*}
-        {*<th>Podobnost</th>*}
-        {*<th>Hodnocení</th>*}
-        {*<th>Typ</th>*}
-    {*</tr>*}
-    {*{foreach $percent50 as $k => $p}*}
-        {*<tr>*}
-            {*<td>{$k}</td>*}
-        {*</tr>*}
-    {*{/foreach}*}
+{*<tr>*}
+{*<th>Název</th>*}
+{*<th>Podobnost</th>*}
+{*<th>Hodnocení</th>*}
+{*<th>Typ</th>*}
+{*</tr>*}
+{*{foreach $percent50 as $k => $p}*}
+{*<tr>*}
+{*<td>{$k}</td>*}
+{*</tr>*}
+{*{/foreach}*}
 
 {*</table>*}
 {*Skupina C*}
 {*<table id="groupProducts">*}
-    {*<tr>*}
-        {*<th>Název</th>*}
-        {*<th>Podobnost</th>*}
-        {*<th>Hodnocení</th>*}
-        {*<th>Typ</th>*}
-    {*</tr>*}
-    {*{foreach $percent70 as $k => $p}*}
-        {*<tr>*}
-            {*<td>{$k}</td>*}
-        {*</tr>*}
-    {*{/foreach}*}
+{*<tr>*}
+{*<th>Název</th>*}
+{*<th>Podobnost</th>*}
+{*<th>Hodnocení</th>*}
+{*<th>Typ</th>*}
+{*</tr>*}
+{*{foreach $percent70 as $k => $p}*}
+{*<tr>*}
+{*<td>{$k}</td>*}
+{*</tr>*}
+{*{/foreach}*}
 
 {*</table>*}

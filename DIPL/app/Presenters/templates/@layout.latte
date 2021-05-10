@@ -23,12 +23,21 @@
 		</button>
 		{if $user->loggedIn}
 			<div class="row">
+				{*<a class="nav-link" n:href="Algorithm:expertSystem">*}
+					{*<button class="btn btn-warning">Doporučené produkty</button>*}
+				{*</a>*}
+				<a class="nav-link" n:href="Product:phase2">
+					<button class="btn btn-info">Prohlédnout!</button>
+				</a>
+				<a class="nav-link" n:href="Algorithm:lflc">
+					<button class="btn btn-info">Doporučené produkty</button>
+				</a>
 				<a class="nav-link" n:href="Algorithm:">
 					<button class="btn btn-primary">Moje skupina</button>
 				</a>
-				<a class="nav-link" n:href="Algorithm:allProductsGroup">
-					<button class="btn btn-primary">Produkty mé skupiny</button>
-				</a>
+				{*<a class="nav-link" n:href="Algorithm:allProductsGroup">*}
+					{*<button class="btn btn-primary">Produkty mé skupiny</button>*}
+				{*</a>*}
 				<a class="nav-link" n:href="Algorithm:myTopProducts">
 					<button class="btn btn-primary">Moje top produkty</button>
 				</a>
@@ -39,17 +48,28 @@
 					<button class="btn btn-primary">TF-IDF</button>
 				</a>
 				<a class="nav-link" n:href="Algorithm:percent">
-					<button class="btn btn-primary">Přístup 1</button>
+					<button class="btn btn-warning">Přístup 1</button>
 				</a>
 				<a class="nav-link" n:href="Algorithm:rating">
-					<button class="btn btn-primary">Přístup 2</button>
-				</a>
-				<a class="nav-link" n:href="Algorithm:similarHistory">
-					<button class="btn btn-primary">Přístup 3</button>
+					<button class="btn btn-warning">Přístup 2</button>
+				{*</a>*}
+				{*<a class="nav-link" n:href="Algorithm:similarHistory">*}
+					{*<button class="btn btn-warning">Přístup 3</button>*}
+				{*</a>*}
+				<a class="nav-link" n:href="Algorithm:similarHistoryUpdated">
+					<button class="btn btn-warning">Přístup 4</button>
 				</a>
 				{*<a class="nav-link" n:href="Algorithm:svd">*}
-					{*<button class="btn btn-primary">Přístup 4</button>*}
+					{*<button class="btn btn-primary">Přístup 5</button>*}
 				{*</a>*}
+				<a class="nav-link" n:href="Algorithm:myRateProducts">
+					<button class="btn btn-info">Moje hodnocené produkty</button>
+				</a>
+				{*{if $user->loggedIn && $user->getIdentity()->id === 4 || $user->loggedIn && $user->getIdentity()->id === 46}*}
+					{*<a class="nav-link" n:href="Algorithm:control">*}
+						{*<button class="btn btn-info">Kontrola</button>*}
+					{*</a>*}
+				{*{/if}*}
 			</div>
 
 		{/if}
@@ -60,7 +80,7 @@
 						<div class="nav-item dropdown no-arrow">
 							<a class="nav-link dropdown" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								{*{if $cart == null}*}
-									<i class="fa fa-shopping-cart fa-2x fa-fw mr-2 ml-auto text-primary"></i>
+									<i class="fa fa-shopping-cart fa-2x fa-fw mr-2 ml-auto text-primary"><span class="cartCount" style="color: black; font-size: medium">({$cartCount})</span></i>
 								{*{else}*}
 									{*<i class="fa fa-shopping-cart fa-sm fa-fw mr-2 ml-auto text-black-400"></i>*}
 								{*{/if}*}
@@ -69,6 +89,7 @@
 								<a class="dropdown-item" n:href="Cart:">Košík</a>
 								<a class="dropdown-item" n:href="History:">Historie</a>
 							</div>
+							<div></div>
 						</div>
 					</li>
 				{/if}
@@ -85,8 +106,10 @@
 								<a class="dropdown-item" n:href="Sign:in">Prihlaseni</a>
 								<a class="dropdown-item" n:href="Sign:up">Registrace</a>
 							{/if}
+							{if $user->loggedIn && $user->getIdentity()->id === 4 || $user->loggedIn && $user->getIdentity()->id === 46}
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Something else here</a>
+							<a class="dropdown-item" n:href="User:results">Výsledná data</a>
+							{/if}
 						</div>
 					</div>
 				</li>
@@ -106,7 +129,12 @@
 			</ul>
 		</div>
 		<div class="col-10">
-			<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+				<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">
+					<div class="alert alert-success">
+						{$flash->message}
+					</div>
+				</div>
+
 			{include content}
 
 		</div>

@@ -1,0 +1,25 @@
+{block content}
+
+    <div class="container">
+        <div class="row">
+            <table id="groupProducts">
+                <tr>
+                    <th>Uživatel</th>
+                    <th>Přístupy</th>
+                </tr>
+                {foreach $users as $chuj}
+                    <tr>
+                        <td><a n:href="User:info $chuj->user_id">{$chuj->username}</a></td>
+                        <td>
+                            <a n:href="User:show $chuj->user_id, 1">Přístup 1</a>
+                            <a n:href="User:show $chuj->user_id, 2">Přístup 2</a>
+                            <a n:href="User:show $chuj->user_id, 3">Přístup 3</a>
+                            <a n:href="User:show $chuj->user_id, 4">Přístup 4</a>
+                            <a n:href="User:show $chuj->user_id, 5">Přístup 5</a>
+                        </td>
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+{/block}

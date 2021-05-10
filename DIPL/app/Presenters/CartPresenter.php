@@ -33,6 +33,7 @@ class CartPresenter extends Nette\Application\UI\Presenter
         $market = $this->session->getSection('market');
 
         $this->template->cart = $market->products;
+        $this->template->cartCount = count($market->products);
     }
 
     public function handleDeleteFromCart($id){

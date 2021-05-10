@@ -38,7 +38,8 @@ class UserManager
 
     public function getAll(){
         return $this->database->table('users')
-            ->select('*');
+            ->select('*')
+            ->fetchAll();
     }
 
     public function getById($id){
@@ -92,9 +93,12 @@ class UserManager
 
 
     public function getUserCategories($id){
+
         return $this->database->table('user_category')
             ->select('category')
-            ->where('user_id', $id);
+            ->where('user_id', $id)
+            ->fetchAll();
+
     }
 
     public function insertCrewTop($crew){
@@ -177,8 +181,26 @@ class UserManager
     public function getCrew($user){
         return $this->database->table('crew')
             ->select('*')
-            ->where('user = ? ', $user);
+            ->where('user = ? ', $user)
+            ->fetchAll();
     }
+
+    public function createUserCategory($id){
+        return $this->database->table('user_category')
+            ->insert([
+                'user_id' => $id,
+                'category' => 'none',
+            ]);
+    }
+
+    public function getUserId($name, $email){
+        return $this->database->table('users')
+            ->select('user_id')
+            ->where('username = ?', $name)
+            ->where('email = ?', $email)
+            ->fetch();
+    }
+
 
     public function deleteSimilarUserCategories($user){
         return $this->database->table('crew')
@@ -199,7 +221,8 @@ class UserManager
     public function getSimilarUserCategories($user){
         return $this->database->table('crew')
             ->select('*')
-            ->where('user = ?', $user);
+            ->where('user = ?', $user)
+            ->fetchAll();
     }
 
     public function insertTopProducts($user, $products){
@@ -232,5 +255,108 @@ class UserManager
         $this->insertSimilarUsersCategories($user, $users_ids);
     }
 
+
+    public function userLikeExists($user){
+        return $this->database->table('likes')
+            ->select('*')
+            ->where('user_id', $user)
+            ->fetch();
+    }
+
+//    public function getCountLikes($user, $access, $party){
+//        return $this->database->table('likes')
+//            ->select('*')
+//            ->where('user_id', $user)
+//            ->where('access', $access)
+//            ->where('party', $party)
+//            ->count();
+//    }
+//
+//    public function getCountLikesNerelevant($user, $access, $party){
+//        return $this->database->table('likes')
+//            ->select('*')
+//            ->where('user_id', $user)
+//            ->where('access', $access)
+//            ->where('party', $party)
+//            ->where('action', 0)
+//            ->count();
+//    }
+
+    public function getAllLikes($user, $access, $party){
+        return $this->database->table('likes')
+            ->select('*')
+            ->where('user_id', $user)
+            ->where('access', $access)
+            ->where('party', $party);
+    }
+
+    public function getTime(){
+        return $this->database->table('likes')
+            ->select('DISTINCT time');
+    }
+
+
+    public function time(){
+        $times = $this->getTime();
+        foreach ($times as $time){
+            $date[] = date_format($time->time, 'Y.m.d');
+        }
+        return $date;
+    }
+
+    public function results($id, $access, $party){
+
+        $date = $this->time();
+
+        $group = $this->getAllLikes($id, $access, $party);
+
+        $pokus = array();
+        foreach ($date as $datum){
+            $count = 0;
+            $nerel = 0;
+            foreach ($group as $item){
+                if ($datum == date_format($item->time, 'Y.m.d')){
+                    $pokus[$datum]['group'] = $party;
+                    $pokus[$datum]['count'] = ++$count;
+                    if ($item->action == 0){
+                        $nerel++;
+                        $pokus[$datum]['nerel'] = $nerel;
+                    }else{
+                        $pokus[$datum]['nerel'] = $nerel;
+                    }
+
+                }
+            }
+        }
+
+        return $pokus;
+
+    }
+
+
+    public function getTopUsersCategories($users){
+        foreach ($users as $user){
+            $categories = $this->database->table('user_category')
+                ->select('category')
+                ->where('user_id', $user)
+                ->fetchAll();
+            $allCat[] = $categories;
+        }
+
+        $a = [];
+        foreach ($allCat as $cat){
+            foreach ($cat as $c){
+                if (!array_key_exists($c->category, $a)){
+                    $a[$c->category] = 1;
+                }else{
+                    $a[$c->category] += 1;
+                }
+
+            }
+        }
+        arsort($a);
+        return $allCat;
+
+    }
 
 }

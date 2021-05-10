@@ -1,0 +1,25 @@
+{block content}
+
+<div class="container">
+    <div class="row">
+        <table id="groupProducts">
+            <tr>
+                <th>Název</th>
+                <th>Hodnocení</th>
+            </tr>
+            {foreach $products as $key => $tp}
+
+                <tr>
+                    <td>
+                        <a class="text-info" n:href="Product:show $key">{$key}</a>
+                    </td>
+                    <td >
+                        {for $i = 0; $i < $tp; $i++}
+                        <i class="fa fa-star text-primary"></i>
+                        {/for}
+                    </td>
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>

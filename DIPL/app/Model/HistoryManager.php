@@ -31,6 +31,13 @@ class HistoryManager
 
     }
 
+    public function getViewById($id){
+        return $this->database->table('view_history')
+            ->select('*')
+            ->where('user_id', $id)
+            ->fetchAll();
+    }
+
     public function getProduct()
     {
         return $this->database->table('products');
@@ -51,6 +58,13 @@ class HistoryManager
             ->where('user_id = ?', $id)
             ->fetch();
         return $row;
+    }
+
+    public function getHistoryById($id){
+        return $this->database->table('history')
+            ->select('*')
+            ->where('user_id', $id)
+            ->fetchAll();
     }
 
     public function insert($userId, $product, $time){
@@ -76,6 +90,13 @@ class HistoryManager
     public function delete($time){
 
         return $this->database->query('DELETE FROM history WHERE user_id=?', $time);
+    }
+
+    public function deleteById($id){
+
+        return $this->database->table('history')
+            ->where('user_id', $id)
+            ->delete();
     }
 
 

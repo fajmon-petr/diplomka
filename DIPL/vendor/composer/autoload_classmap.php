@@ -6,6 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'JsonException' => $vendorDir . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
     'Latte\\CompileException' => $vendorDir . '/latte/latte/src/Latte/exceptions.php',
     'Latte\\Compiler' => $vendorDir . '/latte/latte/src/Latte/Compiler/Compiler.php',
     'Latte\\Engine' => $vendorDir . '/latte/latte/src/Latte/Engine.php',
@@ -359,6 +361,7 @@ return array(
     'Nette\\Utils\\Strings' => $vendorDir . '/nette/utils/src/Utils/Strings.php',
     'Nette\\Utils\\UnknownImageFileException' => $vendorDir . '/nette/utils/src/Utils/exceptions.php',
     'Nette\\Utils\\Validators' => $vendorDir . '/nette/utils/src/Utils/Validators.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
     'Tester\\Assert' => $vendorDir . '/nette/tester/src/Framework/Assert.php',
     'Tester\\AssertException' => $vendorDir . '/nette/tester/src/Framework/AssertException.php',
     'Tester\\CodeCoverage\\Collector' => $vendorDir . '/nette/tester/src/CodeCoverage/Collector.php',
@@ -398,10 +401,16 @@ return array(
     'Tracy\\Debugger' => $vendorDir . '/tracy/tracy/src/Tracy/Debugger/Debugger.php',
     'Tracy\\DefaultBarPanel' => $vendorDir . '/tracy/tracy/src/Tracy/Bar/DefaultBarPanel.php',
     'Tracy\\Dumper' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Dumper.php',
+    'Tracy\\Dumper\\Describer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Describer.php',
+    'Tracy\\Dumper\\Exposer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Exposer.php',
+    'Tracy\\Dumper\\Renderer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Renderer.php',
+    'Tracy\\Dumper\\Value' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Value.php',
     'Tracy\\FireLogger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/FireLogger.php',
     'Tracy\\Helpers' => $vendorDir . '/tracy/tracy/src/Tracy/Helpers.php',
     'Tracy\\IBarPanel' => $vendorDir . '/tracy/tracy/src/Tracy/Bar/IBarPanel.php',
     'Tracy\\ILogger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/ILogger.php',
     'Tracy\\Logger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/Logger.php',
     'Tracy\\OutputDebugger' => $vendorDir . '/tracy/tracy/src/Tracy/OutputDebugger/OutputDebugger.php',
+    'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+    'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );

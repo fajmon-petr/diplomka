@@ -36,6 +36,41 @@ class ProductPresenter extends Nette\Application\UI\Presenter
         $this->template->products = $this->productManager->getAll();
         $this->template->categories = $this->productManager->getCategories();
         /* $this->template->carts = $this->cartManager->getAll();*/
+
+        if($this->getUser()->loggedIn){
+            $market = $this->session->getSection('market');
+            $this->template->cartCount = count($market->products);
+        }
+    }
+
+
+    public function renderPhase2(){
+
+        $allProducts = $this->productManager->getAll();
+        $ids = [6, 8, 33, 38, 34,
+                182, 197, 190, 192, 193,
+                139, 143, 148, 149, 147,
+                162, 163, 175, 176, 167,
+                206, 218, 220, 221, 203,
+                21, 23, 28, 17, 19,
+                231, 227, 225, 236, 241,
+                120, 122, 119, 115, 128];
+
+        $products = [];
+        foreach ($allProducts as $product){
+            foreach ($ids as $id){
+                if ($product->product_id === $id){
+                    $products[$id] = $product;
+                }
+            }
+        }
+        $this->template->products = $products;
+        $this->template->categories = $this->productManager->getCategories();
+
+        if($this->getUser()->loggedIn){
+            $market = $this->session->getSection('market');
+            $this->template->cartCount = count($market->products);
+        }
     }
 
 
@@ -87,6 +122,11 @@ class ProductPresenter extends Nette\Application\UI\Presenter
         $recentProduct = $section->products;
         $recentProduct = array_slice($recentProduct, 0 ,4);
         $this->template->recentProducts = $recentProduct;
+
+        if($this->getUser()->loggedIn){
+            $market = $this->session->getSection('market');
+            $this->template->cartCount = count($market->products);
+        }
     }
 
 
@@ -94,6 +134,12 @@ class ProductPresenter extends Nette\Application\UI\Presenter
         $this->template->products = $this->productManager->getAll()->where('category', $category);
         $this->template->categories = $this->productManager->getCategories();
         $this->template->name = $this->productManager->getByCategory($category)->full_name;
+
+
+        if($this->getUser()->loggedIn){
+            $market = $this->session->getSection('market');
+            $this->template->cartCount = count($market->products);
+        }
 
     }
 
@@ -167,7 +213,9 @@ class ProductPresenter extends Nette\Application\UI\Presenter
 
         $product = $this->getParameter('name');
         $this->handleAddToCart($product, $values->count);
-        $this->flashMessage('Vloženo do košíku');
+        //$this->flashMessage('Vloženo do košíku');
+        $section = $this->session->getSection('mySection');
+        $section->products[$product]['count']--;
         $this->redirect('this');
     }
 
@@ -175,7 +223,7 @@ class ProductPresenter extends Nette\Application\UI\Presenter
     public function handleAddToCart($productName, $count)
     {
         $market = $this->session->getSection('market');
-        $section = $this->session->getSection('mySection');
+
         //$name = $this->productManager->getByName($productId)->title;
         $id = $this->productManager->getByName($productName)->product_id;
 
@@ -187,9 +235,9 @@ class ProductPresenter extends Nette\Application\UI\Presenter
             $market->products[$id]['count'] += $count;
         }
 
-        $section->products[$productName]['count']--;
+
         //dump($market->products);
-        //$this->flashMessage('Vloženo do košíku.');
+        $this->flashMessage('Vloženo do košíku.');
         //$this->redirect('this');
     }
 

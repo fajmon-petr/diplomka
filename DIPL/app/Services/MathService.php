@@ -29,7 +29,7 @@ class MathService
         }elseif ($c < 90){
             $day = 0.2;
         }else{
-            $day = 0;
+            $day = 0.01;
         }
         return $day;
     }
@@ -46,5 +46,44 @@ class MathService
             $percent = 70;
         }
         return $percent;
+    }
+
+    public function access4koeficient($count){
+        if ($count > 20){
+            $count = 20;
+        }
+        return ($count/20)/2;
+    }
+
+    public function access5koeficient($type, $histr){
+            if (!in_array($type, $histr)){
+                $koeficient = 0;
+            }else{
+                $koeficient = 0.5;
+            }
+        return $koeficient;
+    }
+
+    public function normalize($array){
+
+        $min = min($array);
+        $max = max($array);
+
+        foreach ($array as $k => $value){
+            $array[$k] = ($value - $min) / ($max - $min);
+        }
+
+        return $array;
+    }
+
+    public function normalizeTfIdf($array){
+
+        $newArray = $this->normalize($array);
+
+        foreach ($newArray as $k => $value){
+            $newArray[$k] = $value * (1 - 0.5) + 0.5;
+        }
+
+        return $newArray;
     }
 }
